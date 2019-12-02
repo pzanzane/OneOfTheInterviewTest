@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/txtLastUpdated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/last_updated"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/txtStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/txtLastUpdated"
+                android:layout_below="@id/txtLastUpdated"
+                android:layout_marginTop="20dp"
+                android:text="@string/stars"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/txtForks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/txtStars"
+                android:layout_below="@id/txtStars"
+                android:layout_marginTop="20dp"
+                android:text="@string/forks"
+                android:textStyle="bold"/>
+
+
+            <TextView
+                android:id="@+id/txtLastUpdatedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/txtLastUpdated"
+                android:layout_alignParentRight="true"
+                android:text="11-12-2019"/>
+
+            <TextView
+                android:id="@+id/txtStarsValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_alignTop="@id/txtStars"
+                android:layout_alignParentRight="true"
+                android:text="0"/>
+
+            <TextView
+                android:id="@+id/txtForksValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_alignTop="@id/txtForks"
+                android:layout_alignParentRight="true"
+                android:text="0"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
