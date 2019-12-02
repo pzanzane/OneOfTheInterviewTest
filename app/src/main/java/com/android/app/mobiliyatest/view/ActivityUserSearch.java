@@ -1,4 +1,4 @@
-package com.android.app.mobiliyatest.viewmodels;
+package com.android.app.mobiliyatest.view;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.app.mobiliyatest.R;
 import com.android.app.mobiliyatest.adapters.AdapterUserRepo;
 import com.android.app.mobiliyatest.models.UserRepo;
+import com.android.app.mobiliyatest.viewmodels.ViewModelUserRepos;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
