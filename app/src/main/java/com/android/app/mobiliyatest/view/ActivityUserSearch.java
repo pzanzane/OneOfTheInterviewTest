@@ -17,10 +17,12 @@ import android.widget.TextView;
 import com.android.app.mobiliyatest.R;
 import com.android.app.mobiliyatest.adapters.AdapterUserRepo;
 import com.android.app.mobiliyatest.models.UserRepo;
+import com.android.app.mobiliyatest.utility.UtilDateFormat;
 import com.android.app.mobiliyatest.viewmodels.ViewModelUserRepos;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.ParseException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -89,7 +91,17 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
     private View getView(String lastUpdated, String stars, String forks){
         View view = getLayoutInflater().inflate(R.layout.bottomsheet_view,null);
 
-        ((TextView)view.findViewById(R.id.txtLastUpdatedValue)).setText(lastUpdated);
+        String formatedDate = null;
+        try {
+            formatedDate = UtilDateFormat.format(UtilDateFormat.yyyy_MM_dd_T_HH_mm_ss,
+                    UtilDateFormat.MMM_dd_yyyy_h_mm_ss_a, lastUpdated);
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+            formatedDate = lastUpdated;
+        }
+
+        ((TextView)view.findViewById(R.id.txtLastUpdatedValue)).setText(formatedDate);
         ((TextView)view.findViewById(R.id.txtStarsValue)).setText(stars);
         ((TextView)view.findViewById(R.id.txtForksValue)).setText(forks);
         return view;
