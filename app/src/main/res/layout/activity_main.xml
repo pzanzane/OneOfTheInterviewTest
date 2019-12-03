@@ -5,12 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".view.ActivityUserSearch">
 
+    <Button
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/btn_search_margin_top"
+        android:layout_marginRight="@dimen/btn_search_margin_right"/>
+
+    <EditText
+        android:id="@+id/edtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/btnSearch"
+        android:layout_marginRight="10dp"
+        android:layout_alignBottom="@id/btnSearch"/>
+
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/userIcon"
         android:layout_width="@dimen/user_icon_width"
         android:layout_height="@dimen/user_icon_height"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/user_icon_margin_top"/>
+        android:layout_below="@id/btnSearch"
+        android:layout_marginTop="@dimen/user_icon_margin_top"
+        />
 
     <TextView
         android:id="@+id/txtUserName"

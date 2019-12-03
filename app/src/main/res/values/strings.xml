@@ -4,4 +4,8 @@
     <string name="stars">Stars</string>
     <string name="last_updated">Last Updated</string>
     <string name="text_no_description">No description</string>
+    <string name="search">Search</string>
+    <string name="search_empty_message">Searched username cannot be empty</string>
+    <string name="search_no_user_found_message">No user with this Username</string>
+    <string name="search_no_repository_found_message">No repository found for this Username</string>
 </resources>

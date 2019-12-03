@@ -12,11 +12,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.app.mobiliyatest.R;
 import com.android.app.mobiliyatest.adapters.AdapterUserRepo;
 import com.android.app.mobiliyatest.models.UserRepo;
+import com.android.app.mobiliyatest.utility.KeyboardUtil;
+import com.android.app.mobiliyatest.utility.ToastUtils;
 import com.android.app.mobiliyatest.utility.UtilDateFormat;
 import com.android.app.mobiliyatest.viewmodels.ViewModelUserRepos;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -27,6 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ActivityUserSearch extends AppCompatActivity implements AdapterUserRepo.IUserRepoClicked {
 
@@ -39,14 +45,17 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
     @BindView(R.id.recycler)
     RecyclerView recyclerRepos;
 
+    @BindView(R.id.edtSearch)
+    EditText edtSearch;
+
+    @BindView(R.id.btnSearch)
+    Button btnSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        getUser("octocat");
-        getUserRepo("octocat");
     }
 
     private void getUser(String userName){
@@ -54,6 +63,11 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
         ViewModelUserRepos viewModelUserRepos = ViewModelProviders.of(this).get(ViewModelUserRepos.class);
         viewModelUserRepos.getUser(userName).observe(this,
                 (user) -> {
+
+                    if(user == null){
+                        ToastUtils.showToast(getString(R.string.search_no_user_found_message));
+                        return;
+                    }
                     Log.d("WASTE","userName: "+user.getName() +"\n"
                             +" login: "+user.getLogin() +"\n"
                             +" avatarUrl: "+user.getAvatarUrl());
@@ -69,6 +83,10 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
         viewModelUserRepos.getUserRepo(userName).observe(this,
                 (list) -> {
 
+                    if(list == null || list.size() <= 0){
+                        ToastUtils.showToast(getString(R.string.search_no_repository_found_message));
+                        return;
+                    }
                     for(UserRepo repo: list){
                         Log.d("WASTE","name: "+repo.getName() +"\n"
                                 +" description: "+repo.getDescription() +"\n"
@@ -125,5 +143,20 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
     @Override
     public void onClick(UserRepo userRepo) {
         bottomSheetDialog(userRepo);
+    }
+
+    @OnClick(R.id.btnSearch)
+    public void searchClicked(View view){
+
+        String textSearch = edtSearch.getText().toString();
+
+        if(TextUtils.isEmpty(textSearch.trim())){
+            ToastUtils.showToast(getString(R.string.search_empty_message));
+           return;
+        }
+
+        KeyboardUtil.hideSoftKeyboard(this, edtSearch);
+        getUser(textSearch);
+        getUserRepo(textSearch);
     }
 }
