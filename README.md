@@ -1,2 +1,2 @@
 # mobiliyatest
-![Gif] (/gif.gif)
+![Gif] (https://raw.githubusercontent.com/pzanzane/mobiliyatest/master/gif.gif)
