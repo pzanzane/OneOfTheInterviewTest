@@ -6,14 +6,20 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +31,7 @@ import com.android.app.mobiliyatest.utility.ToastUtils;
 import com.android.app.mobiliyatest.utility.UtilDateFormat;
 import com.android.app.mobiliyatest.viewmodels.ViewModelUserRepos;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.android.material.animation.AnimatorSetCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.ParseException;
@@ -51,11 +58,21 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
     @BindView(R.id.btnSearch)
     Button btnSearch;
 
+    @BindView(R.id.progressbar)
+    ProgressBar progressbar;
+
+    @BindView(R.id.noUserFoundError)
+    TextView noUserFoundError;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        userIcon.setTag(userIcon.getY());
+        txtUserName.setTag(txtUserName.getY());
     }
 
     private void getUser(String userName){
@@ -64,16 +81,16 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
         viewModelUserRepos.getUser(userName).observe(this,
                 (user) -> {
 
+                    hideProgress();
+
                     if(user == null){
                         ToastUtils.showToast(getString(R.string.search_no_user_found_message));
+                        noUserFoundError.setText((getString(R.string.no_user_found_error)+": "+userName));
                         return;
                     }
-                    Log.d("WASTE","userName: "+user.getName() +"\n"
-                            +" login: "+user.getLogin() +"\n"
-                            +" avatarUrl: "+user.getAvatarUrl());
-
-                    setUserIcon(user.getAvatarUrl());
                     setUsername(TextUtils.isEmpty(user.getName())?user.getLogin():user.getName());
+                    setUserIcon(user.getAvatarUrl());
+                    getUserRepo(userName);
                 });
     }
 
@@ -87,14 +104,6 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
                         ToastUtils.showToast(getString(R.string.search_no_repository_found_message));
                         return;
                     }
-                    for(UserRepo repo: list){
-                        Log.d("WASTE","name: "+repo.getName() +"\n"
-                                +" description: "+repo.getDescription() +"\n"
-                                +" forks: "+repo.getForks() +"\n"
-                                +" updatedAt: "+repo.getUpdatedAt() +"\n"
-                                +" stargazersCount: "+repo.getStargazersCount());
-                    }
-
                     setAdapter(list);
                 });
     }
@@ -126,15 +135,18 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
     }
 
     private void setUserIcon(String userIconLink){
-
         userIcon.setImageURI(Uri.parse(userIconLink));
+        animate(userIcon, 300);
     }
     private void setUsername(String name){
         txtUserName.setText(name);
+        animate(txtUserName, 200);
     }
     private void setAdapter(List<UserRepo> list){
 
+
         recyclerRepos.setLayoutManager(new LinearLayoutManager(this));
+        setLayoutAnimation();
         recyclerRepos.setAdapter(new AdapterUserRepo(list,
                 LayoutInflater.from(this),
                 getString(R.string.text_no_description), this));
@@ -155,8 +167,45 @@ public class ActivityUserSearch extends AppCompatActivity implements AdapterUser
            return;
         }
 
+
+        setAlpha(txtUserName, 0);
+        setViewPosition(Float.parseFloat(String.valueOf(txtUserName.getTag())), txtUserName);
+
+        setAlpha(userIcon, 0);
+        setViewPosition(Float.parseFloat(String.valueOf(userIcon.getTag())), userIcon);
+
+        recyclerRepos.setAdapter(null);
+
+        showProgress();
         KeyboardUtil.hideSoftKeyboard(this, edtSearch);
         getUser(textSearch);
-        getUserRepo(textSearch);
+    }
+
+    private void animate(View view, long delay){
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(ObjectAnimator.ofFloat(view, "alpha", 0.f, 0.5f, 1.0f).setDuration(1000),
+                ObjectAnimator.ofFloat(view, "y", view.getY()-30).setDuration(1200));
+        animatorSet.setStartDelay(delay);
+        animatorSet.start();
+    }
+
+    private void setViewPosition(float y, View view){
+
+        view.setTranslationY(y);
+    }
+    private void setAlpha(View view, float alpha){
+        view.setAlpha(alpha);
+    }
+    private void setLayoutAnimation(){
+        int resId = R.anim.layout_animation_recycler;
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, resId);
+        recyclerRepos.setLayoutAnimation(animation);
+    }
+    private void showProgress(){
+        progressbar.setVisibility(View.VISIBLE);
+    }
+    private void hideProgress(){
+        progressbar.setVisibility(View.GONE);
     }
 }

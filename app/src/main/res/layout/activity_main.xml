@@ -12,15 +12,23 @@
         android:text="@string/search"
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/btn_search_margin_top"
-        android:layout_marginRight="@dimen/btn_search_margin_right"/>
+        android:layout_marginRight="@dimen/btn_search_margin_right"
+        />
 
-    <EditText
-        android:id="@+id/edtSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_toLeftOf="@id/btnSearch"
         android:layout_marginRight="10dp"
-        android:layout_alignBottom="@id/btnSearch"/>
+        android:layout_alignBottom="@id/btnSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_a_github_user_id"
+        android:focusableInTouchMode="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/userIcon"
@@ -38,7 +46,8 @@
         android:text=""
         android:layout_below="@id/userIcon"
         android:layout_marginTop="@dimen/text_username_margin_top"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -48,5 +57,20 @@
         android:layout_marginTop="@dimen/recyclerview_margin_top">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/noUserFoundError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"
+        />
 
 </RelativeLayout>

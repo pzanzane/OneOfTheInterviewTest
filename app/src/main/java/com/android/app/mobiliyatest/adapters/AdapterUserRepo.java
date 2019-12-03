@@ -54,6 +54,7 @@ public class AdapterUserRepo extends RecyclerView.Adapter<AdapterUserRepo.ViewHo
 
         View view = infalter.inflate(R.layout.recycle_item_repo,null);
         ViewHolderRepo holder = new ViewHolderRepo(view);
+
         return holder;
     }
 
@@ -68,6 +69,7 @@ public class AdapterUserRepo extends RecyclerView.Adapter<AdapterUserRepo.ViewHo
         holder.txtDescriptionName.setText(!TextUtils.isEmpty(repo.getDescription())?
                 repo.getDescription():
                 strNoDescription);
+
     }
 
     @Override
@@ -94,4 +96,6 @@ public class AdapterUserRepo extends RecyclerView.Adapter<AdapterUserRepo.ViewHo
             ButterKnife.bind(this, itemView);
         }
     }
+
+
 }
